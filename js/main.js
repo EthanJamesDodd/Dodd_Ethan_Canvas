@@ -12,17 +12,25 @@
         player = { x: 275, y: 550, width: 50, height: 50, speed: 8, lives: 3},
         bulletArray = [],
         squares = [
-          {x: 30, y: 30, width: 30, height: 30, image: enemy1, xspeed: 8, yspeed: 6},
-          {x: 123, y: 30, width: 40, height: 40, image: enemy2, xspeed: 6, yspeed: 12},
-          {x: 251, y: 30, width: 35, height: 35, image: enemy3, xspeed: 4, yspeed: 8}
+          {x: 30, y: 30, width: 30, height: 30, image: enemy1, xspeed: 8, yspeed: 6, points: 5},
+          {x: 123, y: 30, width: 40, height: 40, image: enemy2, xspeed: 6, yspeed: 12, points: 15},
+          {x: 251, y: 30, width: 35, height: 35, image: enemy3, xspeed: 4, yspeed: 8, points: 25}
         ],
         playButton = document.querySelector('.play'),
         pauseButton = document.querySelector('.pause');
 
-  let  playState = true;
+  let  playState = true,
+       score = 0;
 
   function draw() {
-    ctx.clearRect(0, 0, theCanvas.width, theCanvas.height)
+    ctx.clearRect(0, 0, theCanvas.width, theCanvas.height);
+
+    //Draw the scre first
+    ctx.fillStyle = 'rgb(255, 255, 255)';
+    ctx.font = '18px sans-serif';
+    ctx.fillText(`Score : ${score}`, 500, 20);
+
+
     ctx.drawImage(playerImg, player.x, player.y, player.width, player.height);
 
     bulletArray.forEach((bullet, index) => {
@@ -36,6 +44,9 @@
         if(bullet.y <= (square.y + square.height) && bullet.y > square.y && bullet.x > square.x&& bullet.x < (square.x + square.width)) {
           delete squares[index];
           delete bulletArray[bulletIndex];
+
+          //Increment the score based on enemy points!
+          score += square.points;
 
           //Play explosion sound
           let explode = document.createElement('audio');
@@ -54,7 +65,7 @@
 
       //Remove bullets that are off Canvas
       if(bullet.y < 0) {
-        delete bulletArray[index];
+        bulletArray.splice(index, 1);
       }
     })
 
