@@ -6,12 +6,15 @@
   const theCanvas = document.querySelector('canvas'),
         ctx = theCanvas.getContext('2d'),
         playerImg = document.querySelector('.ship'),
-        player = { x: 275, y: 550, width: 50, height: 50, speed: 8, lives: 3}
+        enemy1 = document.querySelector('.enemyOne'),
+        enemy2 = document.querySelector('.enemyTwo'),
+        enemy3 = document.querySelector('.enemyThree'),
+        player = { x: 275, y: 550, width: 50, height: 50, speed: 8, lives: 3},
         bulletArray = [],
         squares = [
-          {x: 30, y: 30, width: 30, height: 30, color: 'rgba(0, 200, 0, 0.8)', xspeed: 8, yspeed: 6},
-          {x: 123, y: 30, width: 40, height: 40, color: 'rgba(200, 0, 0, 0.8)', xspeed: 6, yspeed: 12},
-          {x: 251, y: 30, width: 35, height: 35, color: 'rgba(0, 0, 200, 0.8)', xspeed: 4, yspeed: 8}
+          {x: 30, y: 30, width: 30, height: 30, image: enemy1, xspeed: 8, yspeed: 6},
+          {x: 123, y: 30, width: 40, height: 40, image: enemy2, xspeed: 6, yspeed: 12},
+          {x: 251, y: 30, width: 35, height: 35, image: enemy3, xspeed: 4, yspeed: 8}
         ],
         playButton = document.querySelector('.play'),
         pauseButton = document.querySelector('.pause');
@@ -23,7 +26,7 @@
     ctx.drawImage(playerImg, player.x, player.y, player.width, player.height);
 
     bulletArray.forEach((bullet, index) => {
-      ctx.fillStyle = 'rgba(200, 0, 0, 0.85)';
+      ctx.fillStyle = 'rgba(255, 0, 0, 1)';
       ctx.fillRect(bullet.x, bullet.y, bullet.x2, bullet.y2);
 
       let bulletIndex = index;
@@ -56,8 +59,8 @@
     })
 
     squares.forEach( square => {
-      ctx.fillStyle = square.color
-      ctx.fillRect(square.x, square.y, square.width, square.height);
+    //  ctx.fillStyle = square.color
+      ctx.drawImage(square.image, square.x, square.y, square.width, square.height);
 
       if(square.x + square.width > theCanvas.width) {
         square.xspeed *= -1;
@@ -73,7 +76,7 @@
 
       square.x += square.xspeed;
       square.y += square.yspeed;
-    })
+    }) //End Squares.forEach
 
     if(playState === false){
       window.cancelAnimationFrame(draw);
